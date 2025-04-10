@@ -6,13 +6,15 @@
 # https://www.geeksforgeeks.org/flask-creating-first-simple-application/
 
 
-from flask import Flask
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
 @app.route('/api/v1/details')
 def details():
-    return '<h1>Hello World</h1>'
+    return jsonify({
+        'message': 'hello_world'
+    }) 
 
 if __name__ == '__main__':
     app.run()
