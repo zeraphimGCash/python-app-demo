@@ -8,6 +8,7 @@
 
 from flask import Flask, jsonify
 import datetime
+import socket
 
 app = Flask(__name__)
 
@@ -21,8 +22,8 @@ def healthz():
 @app.route('/api/v1/details')
 def details():
     return jsonify({
-        'time': datetime.datetime.now().strftime("%I:%M%p %S on %B %d, %Y"),
-        'hostname': 'here'
+        'time': datetime.datetime.now().strftime("%I:%M%p:%S on %B %d, %Y"),
+        'hostname': socket.gethostname()
     }) 
 
 if __name__ == '__main__':
