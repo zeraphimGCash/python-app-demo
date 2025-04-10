@@ -181,3 +181,152 @@ Run this, code was copied from Docker Hub, replace `docker` with `podman`
 ```bash
 podman push jcdiamantegcash/python-app-demo:v2
 ```
+
+7. Using `Kind`
+
+https://kind.sigs.k8s.io/
+
+Setup
+https://kind.sigs.k8s.io/docs/user/quick-start/
+
+
+This is the command I followed for MacOS, Apple Silicon
+
+```bash
+brew install kind
+```
+
+```bash
+kind create cluster
+```
+
+Check if hte kind cluster container was made
+
+```bash
+podman ps
+```
+
+Typically looks like this
+
+```bash
+e94612b5426e  docker.io/kindest/node@sha256:f226345927d7e348497136874b6d207e0b32cc52154ad8323129352923a3142f                        38 seconds ago  Up 38 seconds  127.0.0.1:59849->6443/tcp  kind-control-plane
+```
+
+8. Installing Kubectl
+
+9. Basic Kubectl commands
+
+```bash
+kubectl version
+
+kubectl get pods
+
+kubectl cluster-info
+
+kubectl get ns
+
+```
+
+Upon running `kubectl get ns` and `podman ps` you should see these results.
+
+```bash
+zeraphim ~/Desktop/python-app (main) ± 1 > kubectl get ns
+NAME                 STATUS   AGE
+default              Active   4h
+kube-node-lease      Active   4h
+kube-public          Active   4h
+kube-system          Active   4h
+local-path-storage   Active   4h
+zeraphim ~/Desktop/python-app (main) ± 1 > podman ps
+CONTAINER ID  IMAGE                                                                                           COMMAND               CREATED      STATUS      PORTS                      NAMES
+ff36cc5c3dc7  localhost/python-app:v2                                                                         /bin/sh -c python...  7 hours ago  Up 7 hours  0.0.0.0:8080->5000/tcp     cool_hodgkin
+e94612b5426e  docker.io/kindest/node@sha256:f226345927d7e348497136874b6d207e0b32cc52154ad8323129352923a3142f                        7 hours ago  Up 7 hours  127.0.0.1:59849->6443/tcp  kind-control-plane
+```
+
+10. Installing `Kind` Ingress
+
+https://kind.sigs.k8s.io/docs/user/ingress/
+
+Paste this in terminal to create `Kind` cluster
+
+For DOCKER
+
+```yaml
+cat <<EOF | kind create cluster --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+EOF
+```
+
+For PODMAN
+```yaml
+cat <<EOF | kind create cluster --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+EOF
+```
+
+**Note:** If there's an existing `Kind` cluster, delete it first.
+
+```bash
+kind delete cluster
+```
+
+To use the `Kind` cluster
+
+```bash
+kubectl cluster-info --context kind-kind
+```
+
+To deploy an ingress controller
+
+```bash
+kubectl apply -f https://kind.sigs.k8s.io/examples/ingress/deploy-ingress-nginx.yaml
+```
+
+```bash
+kubectl get pods -n ingress-nginx
+```
+
+Cant follow from here
+https://www.udemy.com/course/from-devops-to-platform-engineering-master-backstage-idps/learn/lecture/49124395#overview
+
+## K8S
+
+1. Creating `deploy.yaml` and `service.yaml`
+
+For **DEPLOYMENT**
+https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+
+For **SERVICE**
+https://kubernetes.io/docs/concepts/services-networking/service/
