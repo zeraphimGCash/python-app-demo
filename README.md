@@ -129,3 +129,55 @@ podman build -t python-app:v2 .
 ```bash
 podman run -p 8080:5000 python-app:v2
 ```
+
+You can now access these endpoints in your browser or in Postman
+
+```
+http://127.0.0.1:8080/api/v1/details
+http://127.0.0.1:8080/api/v1/healthz
+```
+
+## Registry and Personal Auth Token
+
+Upon running `podman images` you can see all of the application images you have along with their different tags, an application image can have multiple tags so as time passes by it might get difficult deploying in an external system like K8S.
+
+Hence we use Docker Registry
+
+Like this
+https://hub.docker.com/
+
+
+1. Login to your account
+
+2. Navigate to `Repositories` page and click `Create a repository` button
+
+3. You can see this command to push your image to Docker Registry but before that.
+
+```bash
+docker push jcdiamantegcash/python-app-demo:tagname
+```
+
+4. Navigate to `Account Settings` -> `Personal Access Tokens` -> `Generate a new Token`
+
+**Name:** Python-App
+**Access Permissions:** Read & Write
+
+5. You will see a `login` command, copy the token and login using that credentials.
+
+Use this instead, paste the token in the password
+
+```bash
+podman login docker.io -u jcdiamantegcash
+```
+
+6. Tag the image to be pushed, and push the image to the Docker Repository
+
+```bash
+podman tag python-app:v2 jcdiamantegcash/python-app-demo:v2
+```
+
+Run this, code was copied from Docker Hub, replace `docker` with `podman`
+
+```bash
+podman push jcdiamantegcash/python-app-demo:v2
+```
