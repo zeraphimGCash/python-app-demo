@@ -323,6 +323,8 @@ https://www.udemy.com/course/from-devops-to-platform-engineering-master-backstag
 
 ## K8S
 
+**NOTE:** Can't run these commands, probably will work if `Kind` is working already
+
 1. Creating `deploy.yaml` and `service.yaml`
 
 For **DEPLOYMENT**
@@ -330,3 +332,57 @@ https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 
 For **SERVICE**
 https://kubernetes.io/docs/concepts/services-networking/service/
+
+2. Apply `deploy.yaml`
+
+```bash
+kubectl apply -f k8s/deploy.yaml
+```
+
+3. Get Deployments
+
+```bash
+kubectl get deployments
+```
+
+## Accessing with Browser
+
+## Bonus
+
+It's very common to access applications on kubernetes via Ingress, as we just learned.
+
+It's also very common to assign DNSs to these applications. For example, it is nice to access `http://python-app.example.com/api/v1/healthz` instead of just `http://localhost/api/v1/healthz`.
+
+Following this logic, we would like to access our newly deployed application at `http://python-app.test.com/api/v1/healthz`.
+
+## Helm
+
+Delete `K8S` yaml files before using `Helm`
+
+```bash
+cd ~/python-app/k8s
+ 
+# Delete the ingress
+kubectl delete -f ingress.yaml
+ 
+# Delete the service
+kubectl delete -f service.yaml
+ 
+# Delete the deployment
+kubectl delete -f deploy.yaml
+```
+
+Installing `Helm`
+
+https://helm.sh/docs/intro/install/
+
+```bash
+brew install helm
+```
+
+Check `Helm` version
+
+```bash
+helm version
+```
+
