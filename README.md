@@ -18,3 +18,25 @@ conda activate python-app-demo
 ```bash
 pip install -r requirements.txt
 ```
+
+4. Building Dockerfile
+
+Check Python images here
+https://hub.docker.com/_/python/tags
+
+Chosen version
+```
+3.11-slim
+```
+
+You can try if the image exists in Podman by
+
+```bash
+podman pull python:3.13-alpine
+```
+
+Check the images if it exists.
+
+```bash
+podman images
+```
