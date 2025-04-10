@@ -12,3 +12,9 @@ conda create -n python-app-demo python==3.11.7
 ```bash
 conda activate python-app-demo
 ```
+
+3. Install `requirements.txt`
+
+```bash
+pip install -r requirements.txt
+```
